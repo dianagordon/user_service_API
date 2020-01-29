@@ -40,8 +40,7 @@ class UsersController < ApplicationController
   end
 
   def sign_out
-    user = User.find_by(
-        token_digest: cookies[:token])
+    user = User.find_by(token_digest: cookies[:token])
     if user
       cookies.delete :token
       render json: json_data(user)
@@ -55,6 +54,8 @@ class UsersController < ApplicationController
     if user && (user.token_digest.to_s == cookies[:token].to_s)
       user.update(update_params)
       render json: json_data(user)
+    else
+      render json:{}, status: :unauthorized
     end
   end
 
